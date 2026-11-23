@@ -16,7 +16,7 @@
 | 2 | Overlay (EVPN/VXLAN, Type-2/3/5) | TBD |
 | 3 | Multi-tenancy (VRF, пересекающиеся подсети) | TBD |
 | 4 | EVPN Multihoming / MLAG | TBD |
-| 5 | Anycast Gateway, QoS, MTU 9000+ | TBD |
+| 5 | Anycast Gateway, DSCP/CoS, MTU 9000+ | TBD |
 | 6 | OOB-VRF, Border/Gateway | TBD |
 
 ## Схема инфры (HLD)
