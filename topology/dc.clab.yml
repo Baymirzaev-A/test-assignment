@@ -1,0 +1,98 @@
+name: dc-fabric
+
+mgmt:
+  network: clab-mgmt
+  ipv4-subnet: 172.20.20.0/24
+
+topology:
+  nodes:
+    gateway:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      binds:
+        - configs/gateway/setup.sh:/setup.sh
+        - configs/gateway/frr.conf:/etc/frr/frr.conf
+      exec:
+        - bash /setup.sh
+      mgmt-ipv4: 172.20.20.100
+
+    spine-1:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      binds:
+        - configs/spine-1/setup.sh:/setup.sh
+        - configs/spine-1/frr.conf:/etc/frr/frr.conf
+      exec:
+        - bash /setup.sh
+      mgmt-ipv4: 172.20.20.11
+
+    spine-2:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      binds:
+        - configs/spine-2/setup.sh:/setup.sh
+        - configs/spine-2/frr.conf:/etc/frr/frr.conf
+      exec:
+        - bash /setup.sh
+      mgmt-ipv4: 172.20.20.12
+
+    leaf-1:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      binds:
+        - configs/leaf-1/setup.sh:/setup.sh
+        - configs/leaf-1/frr.conf:/etc/frr/frr.conf
+      exec:
+        - bash /setup.sh
+      mgmt-ipv4: 172.20.20.21
+
+    leaf-2:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      binds:
+        - configs/leaf-2/setup.sh:/setup.sh
+        - configs/leaf-2/frr.conf:/etc/frr/frr.conf
+      exec:
+        - bash /setup.sh
+      mgmt-ipv4: 172.20.20.22
+
+    leaf-3:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      binds:
+        - configs/leaf-3/setup.sh:/setup.sh
+        - configs/leaf-3/frr.conf:/etc/frr/frr.conf
+      exec:
+        - bash /setup.sh
+      mgmt-ipv4: 172.20.20.23
+
+    leaf-4:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      binds:
+        - configs/leaf-4/setup.sh:/setup.sh
+        - configs/leaf-4/frr.conf:/etc/frr/frr.conf
+      exec:
+        - bash /setup.sh
+      mgmt-ipv4: 172.20.20.24
+
+  links:
+    # Gateway <-> Spine
+    - endpoints: ["gateway:eth1", "spine-1:eth1"]
+    - endpoints: ["gateway:eth2", "spine-2:eth1"]
+
+    # Spine-1 <-> Leaf-1..4
+    - endpoints: ["spine-1:eth2", "leaf-1:eth1"]
+    - endpoints: ["spine-1:eth3", "leaf-2:eth1"]
+    - endpoints: ["spine-1:eth4", "leaf-3:eth1"]
+    - endpoints: ["spine-1:eth5", "leaf-4:eth1"]
+
+    # Spine-2 <-> Leaf-1..4
+    - endpoints: ["spine-2:eth2", "leaf-1:eth2"]
+    - endpoints: ["spine-2:eth3", "leaf-2:eth2"]
+    - endpoints: ["spine-2:eth4", "leaf-3:eth2"]
+    - endpoints: ["spine-2:eth5", "leaf-4:eth2"]
+
+    # MLAG peer-links (L2, no IP)
+    - endpoints: ["leaf-1:eth3", "leaf-2:eth3"]
+    - endpoints: ["leaf-3:eth3", "leaf-4:eth3"]
