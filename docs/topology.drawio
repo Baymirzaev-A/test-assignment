@@ -1,0 +1,67 @@
+<mxfile host="Electron">
+  <diagram name="Underlay-LLD" id="underlay-lld-v2">
+    <mxGraphModel dx="1585" dy="975" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gw" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;align=center;" value="&lt;b&gt;Gateway&lt;/b&gt;&lt;br&gt;AS 65000&lt;br&gt;Router-ID: 10.0.0.100/32&lt;br&gt;VTEP: 10.10.10.100/32" vertex="1">
+          <mxGeometry height="80" width="200" x="700" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=center;" value="&lt;b&gt;Spine-1&lt;/b&gt;&lt;br&gt;AS 65001&lt;br&gt;Router-ID: 10.0.0.1/32" vertex="1">
+          <mxGeometry height="70" width="180" x="300" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="s2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=center;" value="&lt;b&gt;Spine-2&lt;/b&gt;&lt;br&gt;AS 65002&lt;br&gt;Router-ID: 10.0.0.2/32" vertex="1">
+          <mxGeometry height="70" width="180" x="1120" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="l1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=center;" value="&lt;b&gt;Leaf-1&lt;/b&gt;&lt;br&gt;AS 65111&lt;br&gt;Router-ID: 10.0.1.1/32&lt;br&gt;VTEP: 10.10.10.1/32" vertex="1">
+          <mxGeometry height="85" width="180" x="20" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=center;" value="&lt;b&gt;Leaf-2&lt;/b&gt;&lt;br&gt;AS 65112&lt;br&gt;Router-ID: 10.0.1.2/32&lt;br&gt;VTEP: 10.10.10.2/32" vertex="1">
+          <mxGeometry height="85" width="180" x="510" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="l3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=center;" value="&lt;b&gt;Leaf-3&lt;/b&gt;&lt;br&gt;AS 65113&lt;br&gt;Router-ID: 10.0.1.3/32&lt;br&gt;VTEP: 10.10.10.3/32" vertex="1">
+          <mxGeometry height="85" width="180" x="910" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="l4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=center;" value="&lt;b&gt;Leaf-4&lt;/b&gt;&lt;br&gt;AS 65114&lt;br&gt;Router-ID: 10.0.1.4/32&lt;br&gt;VTEP: 10.10.10.4/32" vertex="1">
+          <mxGeometry height="85" width="180" x="1400" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="e_gw_s1" edge="1" parent="1" source="gw" style="rounded=0;html=1;endArrow=none;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;" target="s1" value="192.168.255.0/31&#xa;GW: .0 | S1: .1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_gw_s2" edge="1" parent="1" source="gw" style="rounded=0;html=1;endArrow=none;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;" target="s2" value="192.168.255.2/31&#xa;GW: .2 | S2: .3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s1_l1" edge="1" parent="1" source="s1" style="rounded=0;html=1;endArrow=none;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;" target="l1" value="192.168.1.0/31&#xa;S1: .0 | L1: .1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s1_l2" edge="1" parent="1" source="s1" style="rounded=0;html=1;endArrow=none;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;" target="l2" value="192.168.1.2/31&#xa;S1: .2 | L2: .3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s1_l3" edge="1" parent="1" source="s1" style="rounded=0;html=1;endArrow=none;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#000000;" target="l3" value="192.168.1.4/31&#xa;S1: .4 | L3: .5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s1_l4" edge="1" parent="1" source="s1" style="rounded=0;html=1;endArrow=none;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#000000;" target="l4" value="192.168.1.6/31&#xa;S1: .6 | L4: .7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s2_l3" edge="1" parent="1" source="s2" style="rounded=0;html=1;endArrow=none;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;" target="l3" value="192.168.2.4/31&#xa;S2: .4 | L3: .5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s2_l4" edge="1" parent="1" source="s2" style="rounded=0;html=1;endArrow=none;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;" target="l4" value="192.168.2.6/31&#xa;S2: .6 | L4: .7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s2_l1" edge="1" parent="1" source="s2" style="rounded=0;html=1;endArrow=none;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#000000;" target="l1" value="192.168.2.0/31&#xa;S2: .0 | L1: .1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_s2_l2" edge="1" parent="1" source="s2" style="rounded=0;html=1;endArrow=none;strokeWidth=2;fontSize=10;labelBackgroundColor=#ffffff;strokeColor=#000000;" target="l2" value="192.168.2.2/31&#xa;S2: .2 | L2: .3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_l1_l2" edge="1" parent="1" source="l1" style="rounded=0;html=1;endArrow=none;strokeWidth=3;dashed=1;strokeColor=#b85450;fontColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;" target="l2" value="MLAG peer-link&#xa;L2, no IP&#xa;(DFS group)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_l3_l4" edge="1" parent="1" source="l3" style="rounded=0;html=1;endArrow=none;strokeWidth=3;dashed=1;strokeColor=#b85450;fontColor=#b85450;fontSize=10;labelBackgroundColor=#ffffff;" target="l4" value="MLAG peer-link&#xa;L2, no IP&#xa;(DFS group)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

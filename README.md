@@ -59,4 +59,4 @@ graph TD
 | **Разные ASN у Spine** | Leaf видит два независимых пути, чистый ECMP, без петель. |
 | **Отдельные loopback'и (Router-ID и VTEP)** | Разделение underlay и overlay визуально и логически; VTEP-адреса не участвуют в underlay-маршрутизации. |
 
-> Полные обоснования (RD/RT, DF election, ESI, MLAG vs EVPN MH) — в `docs/design-decisions.md`
+> Полные обоснования (RD/RT, DF election, ESI, MLAG vs EVPN MH) - в `docs/design-decisions.md`
