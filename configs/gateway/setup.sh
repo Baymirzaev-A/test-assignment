@@ -1,22 +1,20 @@
-frr version 10.2.1
-frr defaults traditional
-hostname gateway
-log syslog informational
-service integrated-vtysh-config
-!
-router bgp 65000
- bgp router-id 10.0.0.100
- no bgp default ipv4-unicast
- no bgp ebgp-requires-policy
+#!/bin/bash
+set -e
 
- neighbor 192.168.255.1 remote-as 65001
- neighbor 192.168.255.3 remote-as 65001
- !
- address-family ipv4 unicast
-  network 10.0.0.100/32
-  neighbor 192.168.255.1 activate
-  neighbor 192.168.255.3 activate
- exit-address-family
-!
-line vty
-!
+echo 1 > /proc/sys/net/ipv4/ip_forward
+ip link set lo up
+ip addr add 10.0.0.100/32 dev lo 2>/dev/null || true
+
+setup_iface() {
+    local iface=$1
+    local ip=$2
+    if ip link show "$iface" >/dev/null 2>&1; then
+        ip link set "$iface" up mtu 9000
+        ip addr add "$ip" dev "$iface" 2>/dev/null || true
+    else
+        echo "Interface $iface not found, skipping"
+    fi
+}
+
+setup_iface eth1 192.168.255.0/31
+setup_iface eth2 192.168.255.2/31
