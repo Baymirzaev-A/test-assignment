@@ -10,11 +10,11 @@ curl -sL https://containerlab.dev/setup | sudo -E bash -s "all"
 git clone https://github.com/Baymirzaev-A/test-assignment.git
 cd test-assignment
 
-sudo containerlab deploy -t topology/dc.clab.yml
+sudo containerlab deploy -t dc.clab.yml
 
-sudo containerlab inspect -t topology/dc.clab.yml
+sudo containerlab inspect -t dc.clab.yml
 ```
-
+для тестов dc-mini.clab.yml
 ## Первичное тестирование (ручное)
 
 ```bash
