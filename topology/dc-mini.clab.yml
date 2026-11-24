@@ -1,0 +1,41 @@
+name: dc-mini
+
+mgmt:
+  network: clab-mgmt
+  ipv4-subnet: 172.20.20.0/24
+
+topology:
+  nodes:
+    spine-1:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      binds:
+        - configs/spine-1/setup.sh:/setup.sh
+        - configs/spine-1/frr.conf:/etc/frr/frr.conf
+      exec:
+        - bash /setup.sh
+      mgmt-ipv4: 172.20.20.11
+
+    spine-2:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      binds:
+        - configs/spine-2/setup.sh:/setup.sh
+        - configs/spine-2/frr.conf:/etc/frr/frr.conf
+      exec:
+        - bash /setup.sh
+      mgmt-ipv4: 172.20.20.12
+
+    leaf-1:
+      kind: linux
+      image: quay.io/frrouting/frr:10.2.1
+      binds:
+        - configs/leaf-1/setup.sh:/setup.sh
+        - configs/leaf-1/frr.conf:/etc/frr/frr.conf
+      exec:
+        - bash /setup.sh
+      mgmt-ipv4: 172.20.20.21
+
+  links:
+    - endpoints: ["spine-1:eth2", "leaf-1:eth1"]
+    - endpoints: ["spine-2:eth2", "leaf-1:eth2"]
