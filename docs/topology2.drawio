@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="Underlay-LLD" id="underlay-lld-v7">
-    <mxGraphModel dx="2060" dy="1268" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1355" dy="834" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -10,7 +10,7 @@
         <mxCell id="s1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=center;" value="&lt;b&gt;Spine-1&lt;/b&gt;&lt;br&gt;AS 65001&lt;br&gt;Router-ID: 10.0.0.1/32" vertex="1">
           <mxGeometry height="70" width="180" x="300" y="220" as="geometry" />
         </mxCell>
-        <mxCell id="s2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=center;" value="&lt;b&gt;Spine-2&lt;/b&gt;&lt;br&gt;AS 65002&lt;br&gt;Router-ID: 10.0.0.2/32" vertex="1">
+        <mxCell id="s2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;align=center;" value="&lt;b&gt;Spine-2&lt;/b&gt;&lt;br&gt;AS 65001&lt;br&gt;Router-ID: 10.0.0.2/32" vertex="1">
           <mxGeometry height="70" width="180" x="1120" y="220" as="geometry" />
         </mxCell>
         <mxCell id="l1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=center;" value="&lt;b&gt;Leaf-1&lt;/b&gt;&lt;br&gt;AS 65111&lt;br&gt;Router-ID: 10.0.1.1/32&lt;br&gt;VTEP: 10.10.10.1/32" vertex="1">

@@ -8,11 +8,13 @@
 |------------|------|-----|
 | Gateway | Выход во внешние сети | 65000 |
 | Spine-1 | Underlay spine | 65001 |
-| Spine-2 | Underlay spine | 65002 |
+| Spine-2 | Underlay spine | 65001 |
 | Leaf-1 | Leaf (MLAG-пара с Leaf-2) | 65111 |
 | Leaf-2 | Leaf (MLAG-пара с Leaf-1) | 65112 |
 | Leaf-3 | Leaf (MLAG-пара с Leaf-4) | 65113 |
 | Leaf-4 | Leaf (MLAG-пара с Leaf-3) | 65114 |
+
+Spine'ы используют общий ASN 65001 (ASN pre-planning, RFC 7938) - это упрощает ECMP
 
 ## 2. IP план
 ### Соединение Gateway и Spine

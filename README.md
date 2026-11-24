@@ -25,7 +25,7 @@ graph TD
     GW["Gateway<br/>AS 65000<br/>(border)"]
 
     S1["Spine-1<br/>AS 65001"]
-    S2["Spine-2<br/>AS 65002"]
+    S2["Spine-2<br/>AS 65001"]
 
     L1["Leaf-1<br/>AS 65111"]
     L2["Leaf-2<br/>AS 65112"]
@@ -56,7 +56,7 @@ graph TD
 |---------|--------|
 | **eBGP в underlay** | Масштабирование (best-path, без flooding), политики (route-map/communities), естественный ECMP в CLOS. Использование eBGP признано стандартным решением для ЦОД (RFC 7938). |
 | **iBGP EVPN в overlay** | Стандартный способ L2/L3 stretch в ЦОД; Type-2 обеспечивает L2, Type-5 маршруты обеспечивают L3, а type-3 отвечает за обнаружение VTEP и помогает понять, куда напрявлять BUM-трафик. |
-| **Разные ASN у Spine** | Leaf видит два независимых пути, чистый ECMP, без петель. |
+| **Один ASN у Spine (65001)** | Соответствует RFC 7938 (ASN pre-planning): упрощает ECMP, исключает path hunting |
 | **Отдельные loopback'и (Router-ID и VTEP)** | Разделение underlay и overlay визуально и логически; VTEP-адреса не участвуют в underlay-маршрутизации. |
 
 > Полные обоснования (RD/RT, DF election, ESI, MLAG vs EVPN MH) - в `docs/design-decisions.md`
