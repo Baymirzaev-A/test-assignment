@@ -4,6 +4,7 @@ set -e
 echo 1 > /proc/sys/net/ipv4/ip_forward
 ip link set lo up
 ip addr add 10.0.1.2/32 dev lo 2>/dev/null || true
+ip addr add 10.10.10.2/32 dev lo 2>/dev/null || true
 
 setup_iface() {
     local iface=$1

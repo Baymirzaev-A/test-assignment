@@ -7,6 +7,8 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 # Loopback (Router-ID)
 ip link set lo up
 ip addr add 10.0.0.1/32 dev lo 2>/dev/null || true
+# И для оверлэй
+ip addr add 10.10.255.1/32 dev lo 2>/dev/null || true
 
 # поднять интерфейс, если он существует (для теста)
 setup_iface() {
