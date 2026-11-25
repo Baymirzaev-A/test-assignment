@@ -82,6 +82,36 @@ topology:
       exec:
         - bash /setup.sh
       mgmt-ipv4: 172.20.20.24
+    
+    srv-mh-01:
+      kind: linux
+      image: alpine:latest
+      exec:
+        - ip link set eth1 up
+        - ip link set eth2 up
+
+    srv-mh-02:
+      kind: linux
+      image: alpine:latest
+      exec:
+        - ip link set eth1 up
+        - ip link set eth2 up
+
+    srv-mlag-01:
+      kind: linux
+      image: alpine:latest
+
+    srv-mlag-02:
+      kind: linux
+      image: alpine:latest
+
+    srv-mlag-03:
+      kind: linux
+      image: alpine:latest
+
+    srv-mlag-04:
+      kind: linux
+      image: alpine:latest
 
   links:
     # Gateway <-> Spine
