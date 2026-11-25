@@ -34,6 +34,10 @@ docker exec -it clab-dc-fabric-leaf-1 vtysh -c "show ip route 10.0.0.100/32"
 ```
 Ожидаемый результат: два next-hop (через Spine-1 и Spine-2), например 192.168.1.0 и 192.168.2.0
 
+**Теперь проверяем оверлэй**
+
+docker exec -it clab-dc-fabric-leaf-1 vtysh -c "show evpn vni"
+
 ## Остановка и удаление лабы.
 
 ```bash
