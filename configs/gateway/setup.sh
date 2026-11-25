@@ -19,3 +19,13 @@ setup_iface() {
 
 setup_iface eth1 192.168.255.0/31
 setup_iface eth2 192.168.255.2/31
+
+#Tenant A
+create_l2vni br-a10 vx-a10 10010
+create_l2vni br-a20 vx-a20 10020
+
+#Tenant B
+create_l2vni br-b10 vx-b10 20010
+create_l2vni br-b20 vx-b20 20020
+
+echo "leaf l2evpn/vxlan setup completed"

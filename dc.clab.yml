@@ -103,3 +103,24 @@ topology:
     # MLAG peer-links (L2, no IP)
     - endpoints: ["leaf-1:eth3", "leaf-2:eth3"]
     - endpoints: ["leaf-3:eth3", "leaf-4:eth3"]
+
+    # EVPN Multihoming
+    - endpoints: ["leaf-1:eth4", "srv-mh-01:eth1"]
+    - endpoints: ["leaf-2:eth4", "srv-mh-01:eth2"]
+
+    - endpoints: ["leaf-3:eth4", "srv-mh-02:eth1"]
+    - endpoints: ["leaf-4:eth4", "srv-mh-02:eth2"]
+
+    # MLAG: Leaf-1 / Leaf-2
+    - endpoints: ["leaf-1:eth5", "srv-mlag-01:eth1"]
+    - endpoints: ["leaf-2:eth5", "srv-mlag-01:eth2"]
+
+    - endpoints: ["leaf-1:eth6", "srv-mlag-02:eth1"]
+    - endpoints: ["leaf-2:eth6", "srv-mlag-02:eth2"]
+
+    # MLAG: Leaf-3 / Leaf-4
+    - endpoints: ["leaf-3:eth5", "srv-mlag-03:eth1"]
+    - endpoints: ["leaf-4:eth5", "srv-mlag-03:eth2"]
+
+    - endpoints: ["leaf-3:eth6", "srv-mlag-04:eth1"]
+    - endpoints: ["leaf-4:eth6", "srv-mlag-04:eth2"]
