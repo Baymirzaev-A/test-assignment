@@ -23,7 +23,7 @@ docker exec -it clab-dc-fabric-spine-1 vtysh -c "show bgp summary"
 docker exec -it clab-dc-fabric-spine-1 vtysh -c "show ip route bgp"
 ```
 
-Ожидаемый результат: маршруты до 10.0.1.1/32 (Leaf-1), 10.0.1.2/32 (Leaf-2), 10.0.1.3/32 (Leaf-3), 10.0.1.4/32 (Leaf-4), 10.0.0.100/32 (Gateway) с next-hop через соответствующие /31-линки.
+Ожидаемый результат: маршруты до 10.0.1.1/32 (Leaf-1), 10.0.1.2/32 (Leaf-2), 10.0.1.3/32 (Leaf-3), 10.0.1.4/32 (Leaf-4), 10.0.0.100/32 (Gateway) с next-hop через соответствующие /31-линки. Помимо это маршруты к 10.10.10.x/32. В выводе должны появиться IPv4 Unicast Summary и L2VPN EVPN Summary. 
 
 ```bash
 docker exec -it clab-dc-fabric-leaf-1 ping -I 10.0.1.1 -c 4 10.0.1.2
@@ -34,9 +34,7 @@ docker exec -it clab-dc-fabric-leaf-1 vtysh -c "show ip route 10.0.0.100/32"
 ```
 Ожидаемый результат: два next-hop (через Spine-1 и Spine-2), например 192.168.1.0 и 192.168.2.0
 
-**Теперь проверяем оверлэй**
 
-docker exec -it clab-dc-fabric-leaf-1 vtysh -c "show evpn vni"
 
 ## Остановка и удаление лабы.
 
