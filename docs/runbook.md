@@ -33,8 +33,25 @@ docker exec -it clab-dc-fabric-leaf-1 ping -I 10.0.1.1 -c 4 10.0.1.2
 docker exec -it clab-dc-fabric-leaf-1 vtysh -c "show ip route 10.0.0.100/32"
 ```
 Ожидаемый результат: два next-hop (через Spine-1 и Spine-2), например 192.168.1.0 и 192.168.2.0
+```bash
+ docker exec clab-dc-fabric-leaf-1 vtysh -c "show bgp l2vpn evpn sum"
+```
+Здесь должны увидеть оба спайна, их AS64999
 
+```bash
+docker exec clab-dc-fabric-leaf-1 vtysh -c "show evpn vni"
+```
+Видим VNI, vxlan if и бриджи.
 
+```bash
+docker exec clab-dc-fabric-leaf-1 vtysh -c "show evpn vni 10010"
+```
+Для того, чтобы увидеть удаленные VTEP 
+
+```bash
+docker exec clab-dc-fabric-leaf-1 vtysh -c "show bgp l2vpn evpn route type 3"
+```
+смотрим, есть ли маршруты тип 3 с VTEP.
 
 ## Остановка и удаление лабы.
 
