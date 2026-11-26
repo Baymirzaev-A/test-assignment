@@ -76,14 +76,39 @@ Router-ID Leaf в `10.0.1.0/24`.
 
 ***Подключения серверов***
 
-| Сервер | Подключение | Leaf-1 | Leaf-2 | Leaf-3 | Leaf-4 |
-|--------|-------------|--------|--------|--------|--------|
-| srv-mh-01 | EVPN MH | eth4 | eth4 | - | - |
-| srv-mh-02 | EVPN MH | - | - | eth4 | eth4 |
-| srv-mlag-01 | MLAG | eth5 | eth5 | - | - |
-| srv-mlag-02 | MLAG | eth6 | eth6 | - | - |
-| srv-mlag-03 | MLAG | - | - | eth5 | eth5 |
-| srv-mlag-04 | MLAG | - | - | eth6 | eth6 |
+| Сервер | Клиент | Подключение | Leaf-1 | Leaf-2 | Leaf-3 | Leaf-4 |
+|--------|--------|-------------|--------|--------|--------|--------|
+| srv-mh-01 | Tenant A | EVPN MH | eth4 | eth4 | - | - |
+| srv-mh-02 | Tenant B | EVPN MH | - | - | eth4 | eth4 |
+| srv-mlag-01 | Tenant A | MLAG | eth5 | eth5 | - | - |
+| srv-mlag-02 | Tenant B | MLAG | eth6 | eth6 | - | - |
+| srv-mlag-03 | Tenant A | MLAG | - | - | eth5 | eth5 |
+| srv-mlag-04 | Tenant B | MLAG | - | - | eth6 | eth6 |
+
+**EVPN MH**
+| leaf | bond | port | vlan и bridge | 
+|------|------|------|---------------|
+| leaf-1 | bond-mh01 | eth4 | 10 - br-a10 |
+| leaf-2 | bond-mh01 | eth4 | 20 - br-a20 |
+| leaf-3 | bond-mh02 | eth4 | 10 - br-b10 |
+| leaf-4 | bond-mh02 | eth4 | 20 - br-b20 |
+
+## Таблица параметров Leaf
+
+| Параметр | Leaf1 | Leaf2 | Leaf3 | Leaf4 |
+| --------------- | ----------------- | ----------------- | ----------------- | ----------------- |
+| Сервер | srv-mh-01 | srv-mh-01 | srv-mh-02 | srv-mh-02 |
+| Tenant | A | A | B | B |
+| Server port | eth4 | eth4 | eth4 | eth4 |
+| Bond interface | bond-mh01 | bond-mh01 | bond-mh02 | bond-mh02 |
+| Bond mode | 802.3ad | 802.3ad | 802.3ad | 802.3ad |
+| ES-ID | 1001 | 1001 | 1002 | 1002 |
+| ES system MAC | 02:00:00:00:10:01 | 02:00:00:00:10:01 | 02:00:00:00:10:02 | 02:00:00:00:10:02 |
+| VLAN 10 bridge | br-a10 | br-a10 | br-b10 | br-b10 |
+| VLAN 20 bridge | br-a20 | br-a20 | br-b20 | br-b20 |
+| VLAN 10 VNI | 10010 | 10010 | 20010 | 20010 |
+| VLAN 20 VNI | 10020 | 10020 | 20020 | 20020 |
+| Physical member | eth4 | eth4 | eth4 | eth4 |
 
 
 | Элемент | tenant-a | tenant-a | 
