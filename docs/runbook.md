@@ -39,9 +39,19 @@ docker exec -it clab-dc-fabric-leaf-1 vtysh -c "show ip route 10.0.0.100/32"
 Здесь должны увидеть оба спайна, их AS64999
 
 ```bash
+docker exec -it clab-dc-fabric-leaf-1 bash
+```
+
+Заходим в каждый контейнер лифа и проверяем
+```bash
+ ip -br link - создались ли бриджи и бонды
+ bridge vni show и bridge vlan tunnel show - соответствие вланов и VNI
+```
+
+```bash
 docker exec clab-dc-fabric-leaf-1 vtysh -c "show evpn vni"
 ```
-Видим VNI, vxlan if и бриджи.
+Видим VNI
 
 ```bash
 docker exec clab-dc-fabric-leaf-1 vtysh -c "show evpn vni 10010"
@@ -51,7 +61,37 @@ docker exec clab-dc-fabric-leaf-1 vtysh -c "show evpn vni 10010"
 ```bash
 docker exec clab-dc-fabric-leaf-1 vtysh -c "show bgp l2vpn evpn route type 3"
 ```
-смотрим, есть ли маршруты тип 3 с VTEP, тип 1 и 4 тоже должны быть
+смотрим, есть ли маршруты тип 3 с VTEP, тип 1 и 4 тоже должны быть.
+
+Тип 1 и 4 отвечают за MH.
+
+```bash
+vtysh -c "show evpn es"
+vtysh -c "show evpn es-evi"
+```
+
+Проверка LACP на Leaf 
+
+
+```bash
+for n in leaf-1 leaf-2 leaf-3 leaf-4; do
+echo "===== $n: bond ====="
+docker exec clab-dc-fabric-$n cat /proc/net/bonding/bond-mh01 2>/dev/null || true
+docker exec clab-dc-fabric-$n cat /proc/net/bonding/bond-mh02 2>/dev/null || true
+done
+```
+
+Sys mac add должен совпадать на парах leaf.
+
+Теперь то же самое на серверах
+
+```bash
+for n in srv-mh-01 srv-mh-02 srv-mlag-01 srv-mlag-02 srv-mlag-03 srv-mlag-04; do
+  echo "===== $n ====="
+  docker exec clab-dc-fabric-$n cat /proc/net/bonding/bond0
+done
+```
+Оба серверных аплинка входят в один агрегатор.
 
 ## Остановка и удаление лабы.
 
