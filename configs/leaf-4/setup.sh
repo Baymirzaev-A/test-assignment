@@ -73,11 +73,14 @@ create_vxlan() {
     bridge vlan add dev "$bridge" vid 10 self
     bridge vlan add dev "$bridge" vid 20 self
 
+    bridge vlan add dev "$vxlan" vid 10
+    bridge vlan add dev "$vxlan" vid 10 tunnel_info id "$vni10"
+
+    bridge vlan add dev "$vxlan" vid 20
+    bridge vlan add dev "$vxlan" vid 20 tunnel_info id "$vni20"
+
     bridge vni add dev "$vxlan" vni "$vni10"
     bridge vni add dev "$vxlan" vni "$vni20"
-
-    bridge vlan add dev "$vxlan" vid 10 tunnel_info id "$vni10"
-    bridge vlan add dev "$vxlan" vid 20 tunnel_info id "$vni20"
 
     ip link set "$vxlan" up
 }
