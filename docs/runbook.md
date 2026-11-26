@@ -51,7 +51,7 @@ docker exec clab-dc-fabric-leaf-1 vtysh -c "show evpn vni 10010"
 ```bash
 docker exec clab-dc-fabric-leaf-1 vtysh -c "show bgp l2vpn evpn route type 3"
 ```
-смотрим, есть ли маршруты тип 3 с VTEP.
+смотрим, есть ли маршруты тип 3 с VTEP, тип 1 и 4 тоже должны быть
 
 ## Остановка и удаление лабы.
 

@@ -100,6 +100,11 @@ vtysh \
     -c "end" \
     -c "write memory"
 
+ip link set dev bond-mh01 down
+ip link set dev bond-mh01 type bond \
+    ad_actor_system 02:00:00:00:10:01
+ip link set dev bond-mh01 up
+
 # srv-mlag-01: Tenant A
 attach_vlan eth5 10 br-a10
 attach_vlan eth5 20 br-a20
