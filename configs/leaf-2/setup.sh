@@ -63,9 +63,33 @@ attach_vlan() {
     ip link set "$subif" master "$bridge"
 }
 
-# srv-mh-01: Tenant A
-attach_vlan eth4 10 br-a10
-attach_vlan eth4 20 br-a20
+# EVPN MH - srv-mh-01
+ES_BOND="bond-mh01"
+ES_ID="1001"
+ES_MAC="02:00:00:00:10:01"
+ES_DF_PREF="100"
+
+ip link add "$ES_BOND" type bond mode 802.3ad 2>/dev/null || true
+ip link set "$ES_BOND" type bond mode 802.3ad miimon 100 lacp_rate fast xmit_hash_policy layer2+3
+ip link set "$ES_BOND" mtu 9000
+
+ip link set eth4 down
+ip link set eth4 nomaster 2>/dev/null || true
+ip link set eth4 master "$ES_BOND"
+ip link set eth4 up
+ip link set "$ES_BOND" up
+
+attach_vlan "$ES_BOND" 10 br-a10
+attach_vlan "$ES_BOND" 20 br-a20
+
+vtysh \
+    -c "configure terminal" \
+    -c "interface ${ES_BOND}" \
+    -c "evpn mh es-id ${ES_ID}" \
+    -c "evpn mh es-sys-mac ${ES_MAC}" \
+    -c "evpn mh es-df-pref ${ES_DF_PREF}" \
+    -c "end" \
+    -c "write memory"
 
 # srv-mlag-01: Tenant A
 attach_vlan eth5 10 br-a10

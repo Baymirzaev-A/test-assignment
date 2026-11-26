@@ -87,17 +87,17 @@ topology:
       kind: linux
       image: alpine:latest
       binds: 
-        - configs/servers/setup.sh:/setup.sh
+        - configs/servers/srv-mh-01.sh:/setup-mh.sh
       exec:
-        - sh /setup.sh
+        - sh /setup-mh.sh
 
     srv-mh-02:
       kind: linux
       image: alpine:latest
       binds: 
-        - configs/servers/setup.sh:/setup.sh
+        - configs/servers/srv-mh-02.sh:/setup-mh.sh
       exec:
-        - sh /setup.sh
+        - sh /setup-mh.sh
 
     srv-mlag-01:
       kind: linux
@@ -130,6 +130,7 @@ topology:
         - configs/servers/setup.sh:/setup.sh
       exec:
         - sh /setup.sh
+      
 
   links:
     # Gateway <-> Spine
