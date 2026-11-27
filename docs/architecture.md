@@ -88,10 +88,10 @@ Router-ID Leaf в `10.0.1.0/24`.
 **EVPN MH**
 | leaf | bond | port | vlan и bridge | 
 |------|------|------|---------------|
-| leaf-1 | bond-mh01 | eth4 | 10 - br-a10 |
-| leaf-2 | bond-mh01 | eth4 | 20 - br-a20 |
-| leaf-3 | bond-mh02 | eth4 | 10 - br-b10 |
-| leaf-4 | bond-mh02 | eth4 | 20 - br-b20 |
+| leaf-1 | bond-mh01 | eth4 | 10 - br-a |
+| leaf-2 | bond-mh01 | eth4 | 20 - br-a |
+| leaf-3 | bond-mh02 | eth4 | 10 - br-b |
+| leaf-4 | bond-mh02 | eth4 | 20 - br-b |
 
 ## Таблица параметров Leaf
 
@@ -104,8 +104,8 @@ Router-ID Leaf в `10.0.1.0/24`.
 | Bond mode | 802.3ad | 802.3ad | 802.3ad | 802.3ad |
 | ES-ID | 1001 | 1001 | 1002 | 1002 |
 | ES system MAC | 02:00:00:00:10:01 | 02:00:00:00:10:01 | 02:00:00:00:10:02 | 02:00:00:00:10:02 |
-| VLAN 10 bridge | br-a10 | br-a10 | br-b10 | br-b10 |
-| VLAN 20 bridge | br-a20 | br-a20 | br-b20 | br-b20 |
+| VLAN 10 bridge | br-a | br-a | br-b | br-b |
+| VLAN 20 bridge | br-a | br-a | br-b | br-b |
 | VLAN 10 VNI | 10010 | 10010 | 20010 | 20010 |
 | VLAN 20 VNI | 10020 | 10020 | 20020 | 20020 |
 | Physical member | eth4 | eth4 | eth4 | eth4 |

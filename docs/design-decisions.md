@@ -34,11 +34,18 @@ Loopback VTEP (`10.10.10.X`) анонсируется в underlay через `ne
 Одна общая AS для overlay. Spine'ы — Route Reflector'ы для iBGP EVPN. Сессии — по loopback'ам VTEP (`10.10.10.X`). Выбор 64999 (вне диапазона underlay-AS) сделан для визуального разделения underlay и overlay в конфигах и диагностике.
 
 **Немного о L2 уровне**
+
 У нас vlan based модель
+
 Vlan10 - br-a - vx-a - VNI 10010 - EVI 10010
 
+Vlan20 - br-a - vx-a - VNI 10020 - EVI 10020
+
+vx-a - аналог NVE порта на huawei - он отвечает за инкапсуляцию в VXLAN
 
 ## 3. RT/RD
+**RT для L2VNI** оставил auto, но RD пришлось поменять, потому что роутер ID 10.0.1.1 (на примере Leaf-1), а нужно бы VTEP_IP (10.10.10.1) для визуального разделения overlay от underlay. Плюс цифры в конце, VNI **1**00**1**0 - 10.10.10.1:**11** и тд.
+
 
 Раздел будет заполнен на этапе overlay: политика Route Target и Route Distinguisher
 для L2VNI и L3VNI, auto vs manual.
@@ -65,3 +72,5 @@ EVPN MH, работает напрямую через оверлэй, сообщ
  Можно задать Preference, чтобы гарантировать победу конкретного leaf, у нас будут DF leaf 1 и 3 (200 priority)
 
 Еще есть такое понятие, как EVI (EVPN Instance) - это по сути MAC-VRF
+
+MLAG на frr проблема, нейронка предложила python mlagd

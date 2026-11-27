@@ -1,0 +1,25 @@
+{
+  "domain": "MLAG-PAIR-12",
+  "node": "leaf-1",
+  "role": "primary",
+  "local_vtep": "10.10.10.1",
+  "peer_vtep": "10.10.10.2",
+  "peer_link": "eth3",
+  "heartbeat_port": 9876,
+  "heartbeat_interval": 1,
+  "heartbeat_timeout": 3,
+  "mlag_bonds": [
+    {
+      "name": "bond-mlag-a",
+      "actor_system": "02:00:00:00:12:01",
+      "actor_priority": 100,
+      "actor_key": 101
+    },
+    {
+      "name": "bond-mlag-b",
+      "actor_system": "02:00:00:00:12:01",
+      "actor_priority": 100,
+      "actor_key": 102
+    }
+  ]
+}
