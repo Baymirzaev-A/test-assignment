@@ -45,11 +45,14 @@ topology:
       startup-config: configs/leaf-1/frr.conf
       daemons: [zebra, bgpd]
       binds:
-      - configs/leaf-1/setup.sh:/setup.sh
-      - configs/mlag/mlag-setup.sh:/mlag-setup.sh
+        - configs/leaf-1/setup.sh:/setup.sh
+        - configs/mlag/mlag-setup.sh:/mlag-setup.sh
+        - configs/mlag/mlagd.py:/usr/local/sbin/mlagd.py
+        - configs/mlag/leaf-1.json:/etc/mlag/mlag.json
       exec:
-      - bash /setup.sh
-      - bash /mlag-setup.sh leaf-1
+        - bash /setup.sh
+        - bash /mlag-setup.sh leaf-1
+        - sh -c 'command -v python3 >/dev/null || exit 1; nohup python3 /usr/local/sbin/mlagd.py /etc/mlag/mlag.json </dev/null >/var/log/mlagd.log 2>&1 &'
       mgmt-ipv4: 172.20.20.21
 
     leaf-2:
@@ -58,11 +61,14 @@ topology:
       startup-config: configs/leaf-2/frr.conf
       daemons: [zebra, bgpd]
       binds:
-      - configs/leaf-2/setup.sh:/setup.sh
-      - configs/mlag/mlag-setup.sh:/mlag-setup.sh
+        - configs/leaf-2/setup.sh:/setup.sh
+        - configs/mlag/mlag-setup.sh:/mlag-setup.sh
+        - configs/mlag/mlagd.py:/usr/local/sbin/mlagd.py
+        - configs/mlag/leaf-2.json:/etc/mlag/mlag.json
       exec:
-      - bash /setup.sh
-      - bash /mlag-setup.sh leaf-2
+        - bash /setup.sh
+        - bash /mlag-setup.sh leaf-2
+        - sh -c 'command -v python3 >/dev/null || exit 1; nohup python3 /usr/local/sbin/mlagd.py /etc/mlag/mlag.json </dev/null >/var/log/mlagd.log 2>&1 &'
       mgmt-ipv4: 172.20.20.22
 
     leaf-3:
@@ -71,11 +77,14 @@ topology:
       startup-config: configs/leaf-3/frr.conf
       daemons: [zebra, bgpd]
       binds:
-      - configs/leaf-3/setup.sh:/setup.sh
-      - configs/mlag/mlag-setup.sh:/mlag-setup.sh
+        - configs/leaf-3/setup.sh:/setup.sh
+        - configs/mlag/mlag-setup.sh:/mlag-setup.sh
+        - configs/mlag/mlagd.py:/usr/local/sbin/mlagd.py
+        - configs/mlag/leaf-3.json:/etc/mlag/mlag.json
       exec:
-      - bash /setup.sh
-      - bash /mlag-setup.sh leaf-3
+        - bash /setup.sh
+        - bash /mlag-setup.sh leaf-3
+        - sh -c 'command -v python3 >/dev/null || exit 1; nohup python3 /usr/local/sbin/mlagd.py /etc/mlag/mlag.json </dev/null >/var/log/mlagd.log 2>&1 &'
       mgmt-ipv4: 172.20.20.23
 
     leaf-4:
@@ -84,11 +93,14 @@ topology:
       startup-config: configs/leaf-4/frr.conf
       daemons: [zebra, bgpd]
       binds:
-      - configs/leaf-4/setup.sh:/setup.sh
-      - configs/mlag/mlag-setup.sh:/mlag-setup.sh
+        - configs/leaf-4/setup.sh:/setup.sh
+        - configs/mlag/mlag-setup.sh:/mlag-setup.sh
+        - configs/mlag/mlagd.py:/usr/local/sbin/mlagd.py
+        - configs/mlag/leaf-4.json:/etc/mlag/mlag.json
       exec:
-      - bash /setup.sh
-      - bash /mlag-setup.sh leaf-4
+        - bash /setup.sh
+        - bash /mlag-setup.sh leaf-4
+        - sh -c 'command -v python3 >/dev/null || exit 1; nohup python3 /usr/local/sbin/mlagd.py /etc/mlag/mlag.json </dev/null >/var/log/mlagd.log 2>&1 &'
       mgmt-ipv4: 172.20.20.24
     
     srv-mh-01:

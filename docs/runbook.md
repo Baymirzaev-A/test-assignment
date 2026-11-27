@@ -93,6 +93,28 @@ done
 ```
 Оба серверных аплинка входят в один агрегатор.
 
+**Далее проверка mlag**
+
+```bash
+for i in 1 2 3 4; do
+  echo "Leaf-$i"
+  docker exec clab-dc-fabric-leaf-$i \
+   ip -br link show
+done
+
+```
+Должны появиться bond-mlag-a и bond-mlag-b.
+
+Теперь проверяем соответствие вланов бондам, у каждого бонда должен быть влан 10 и 20.
+
+```bash
+for i in 1 2 3 4; do
+  echo "========== LEAF-$i =========="
+  docker exec clab-dc-fabric-leaf-$i bridge link show
+  docker exec clab-dc-fabric-leaf-$i bridge vlan show
+done
+```
+
 ## Остановка и удаление лабы.
 
 ```bash

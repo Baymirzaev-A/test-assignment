@@ -197,7 +197,7 @@ def main():
     LOG.info("Stopped; MLAG bonds administratively down")
 
 
-if name == "main":
+if __name__ == "__main__":
     try:
         main()
     except Exception:
