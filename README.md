@@ -58,5 +58,3 @@ graph TD
 | **iBGP EVPN в overlay** | Стандартный способ L2/L3 stretch в ЦОД; Type-2 обеспечивает L2, Type-5 маршруты обеспечивают L3, а type-3 отвечает за обнаружение VTEP и помогает понять, куда напрявлять BUM-трафик. |
 | **Один ASN у Spine (65001)** | Соответствует RFC 7938 (ASN pre-planning): упрощает ECMP, исключает path hunting |
 | **Отдельные loopback'и (Router-ID и VTEP)** | Разделение underlay и overlay визуально и логически; VTEP-адреса не участвуют в underlay-маршрутизации. |
-
-> Полные обоснования (RD/RT, DF election, ESI, MLAG vs EVPN MH) - в `docs/design-decisions.md`

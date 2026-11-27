@@ -85,7 +85,6 @@ def set_lacp_identity(interface, system_mac, system_priority, user_key):
     attributes = {
         "ad_actor_system": system_mac,
         "ad_actor_sys_prio": str(system_priority),
-        "ad_user_port_key": str(user_key),
         "lacp_rate": "1",
         "xmit_hash_policy": "layer2+3",
         "miimon": "100",

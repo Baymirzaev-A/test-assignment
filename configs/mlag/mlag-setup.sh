@@ -34,22 +34,23 @@ create_mlag_bond() {
     local port="$2"
     local bridge="$3"
     local key="$4"
+    local key_path="/sys/class/net/$bond/bonding/ad_user_port_key"
 
-    log "Configuring $bond: $port -> $bridge"
+    log "Configuring $bond: $port -> $bridge, key=$key"
 
     require_iface "$port"
     require_iface "$bridge"
 
-    # Remove the physical interface from its old bridge.
+    # Detach the physical port from any previous master.
     ip link set dev "$port" down
     ip link set dev "$port" nomaster 2>/dev/null || true
 
-    # Create the bond if it does not exist.
+    # Create bond if it does not exist.
     if ! ip link show dev "$bond" >/dev/null 2>&1; then
         ip link add name "$bond" type bond mode 802.3ad
     fi
 
-    # Configure LACP.
+    # Bond must be down before configuring LACP identity.
     ip link set dev "$bond" down
 
     ip link set dev "$bond" type bond \
@@ -61,12 +62,29 @@ create_mlag_bond() {
 
     ip link set dev "$bond" mtu "$MTU"
 
+    # Set user port key before attaching the physical port.
+    [[ -e "$key_path" ]] || {
+        echo "ERROR: missing sysfs attribute: $key_path" >&2
+        exit 1
+    }
+
+    printf '%s\n' "$key" > "$key_path"
+
+    local actual_key
+    actual_key=$(cat "$key_path")
+
+    [[ "$actual_key" == "$key" ]] || {
+        echo "ERROR: $bond expected key $key, got $actual_key" >&2
+        exit 1
+    }
+
+    log "$bond LACP user port key: $actual_key"
+
     # Attach physical server port to bond.
     ip link set dev "$port" mtu "$MTU"
     ip link set dev "$port" master "$bond"
 
-    # Attach bond to existing tenant bridge.
-    ip link set dev "$bond" nomaster 2>/dev/null || true
+    # Attach bond to tenant bridge.
     ip link set dev "$bond" master "$bridge"
 
     # Tagged server trunk: VLAN 10 and VLAN 20.
@@ -76,7 +94,7 @@ create_mlag_bond() {
     ip link set dev "$port" up
     ip link set dev "$bond" up
 
-    log "$bond configured"
+    log "$bond configured successfully"
 }
 
 log "Starting MLAG server interface setup on $LEAF"

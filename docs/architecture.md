@@ -130,7 +130,7 @@ Router-ID Leaf в `10.0.1.0/24`.
 | Actor System MAC | 02:00:00:00:12:01 | 02:00:00:00:34:01 |
 | Heartbeat | Через VTEP loopback | Через VTEP loopback |
 
-Port key 101 и 102
+Port key 101 (bond-mlag-a на eth5) и 102 (bond-mlag-b порт 6)
 
 **Соответствие серверов вланам**
 | Сервер | Tenant | VLAN | Bridge на Leaf | VLAN-интерфейс сервера |
