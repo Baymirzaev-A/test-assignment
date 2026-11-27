@@ -58,7 +58,7 @@ topology:
       startup-config: configs/leaf-2/frr.conf
       daemons: [zebra, bgpd]
       binds:
-      - configs/leaf-1/setup.sh:/setup.sh
+      - configs/leaf-2/setup.sh:/setup.sh
       - configs/mlag/mlag-setup.sh:/mlag-setup.sh
       exec:
       - bash /setup.sh
@@ -71,7 +71,7 @@ topology:
       startup-config: configs/leaf-3/frr.conf
       daemons: [zebra, bgpd]
       binds:
-      - configs/leaf-1/setup.sh:/setup.sh
+      - configs/leaf-3/setup.sh:/setup.sh
       - configs/mlag/mlag-setup.sh:/mlag-setup.sh
       exec:
       - bash /setup.sh
@@ -84,7 +84,7 @@ topology:
       startup-config: configs/leaf-4/frr.conf
       daemons: [zebra, bgpd]
       binds:
-      - configs/leaf-1/setup.sh:/setup.sh
+      - configs/leaf-4/setup.sh:/setup.sh
       - configs/mlag/mlag-setup.sh:/mlag-setup.sh
       exec:
       - bash /setup.sh
