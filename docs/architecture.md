@@ -121,6 +121,24 @@ Router-ID Leaf в `10.0.1.0/24`.
 
 
 **Таблица MLAG**
+| Параметр | MLAG Pair 1 | MLAG Pair 2 |
+|---|---|---|
+| Участники | Leaf1 + Leaf2 | Leaf3 + Leaf4 |
+| Primary | Leaf1 | Leaf3 |
+| Secondary | Leaf2 | Leaf4 |
+| Peer-link | eth3 ↔ eth3 | eth3 ↔ eth3 |
+| Actor System MAC | 02:00:00:00:12:01 | 02:00:00:00:34:01 |
+| Heartbeat | Через VTEP loopback | Через VTEP loopback |
+
+Port key 101 и 102
+
+**Соответствие серверов вланам**
+| Сервер | Tenant | VLAN | Bridge на Leaf | VLAN-интерфейс сервера |
+|---|---|---:|---|---|
+| srv-mlag-01 | A | 10 | br-a | bond0.10 |
+| srv-mlag-02 | B | 20 | br-b | bond0.20 |
+| srv-mlag-03 | A | 10 | br-a | bond0.10 |
+| srv-mlag-04 | B | 20 | br-b | bond0.20 |
 
 
 | Элемент | tenant-a | tenant-a | 
