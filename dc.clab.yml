@@ -45,9 +45,13 @@ topology:
       startup-config: configs/leaf-1/frr.conf
       daemons: [zebra, bgpd]
       binds:
-        - configs/leaf-1/setup.sh:/setup.sh
+      - configs/leaf-1/daemons:/etc/frr/daemons
+      - configs/leaf-1/frr.conf:/etc/frr/frr.conf
+      - configs/leaf-1/setup.sh:/setup.sh
+      - configs/mlag/mlag-setup.sh:/mlag-setup.sh
       exec:
-        - bash /setup.sh
+      - bash /setup.sh
+      - bash /mlag-setup.sh leaf-1
       mgmt-ipv4: 172.20.20.21
 
     leaf-2:
@@ -56,9 +60,13 @@ topology:
       startup-config: configs/leaf-2/frr.conf
       daemons: [zebra, bgpd]
       binds:
-        - configs/leaf-2/setup.sh:/setup.sh
+      - configs/leaf-1/daemons:/etc/frr/daemons
+      - configs/leaf-1/frr.conf:/etc/frr/frr.conf
+      - configs/leaf-1/setup.sh:/setup.sh
+      - configs/mlag/mlag-setup.sh:/mlag-setup.sh
       exec:
-        - bash /setup.sh
+      - bash /setup.sh
+      - bash /mlag-setup.sh leaf-1
       mgmt-ipv4: 172.20.20.22
 
     leaf-3:
@@ -67,9 +75,13 @@ topology:
       startup-config: configs/leaf-3/frr.conf
       daemons: [zebra, bgpd]
       binds:
-        - configs/leaf-3/setup.sh:/setup.sh
+      - configs/leaf-1/daemons:/etc/frr/daemons
+      - configs/leaf-1/frr.conf:/etc/frr/frr.conf
+      - configs/leaf-1/setup.sh:/setup.sh
+      - configs/mlag/mlag-setup.sh:/mlag-setup.sh
       exec:
-        - bash /setup.sh
+      - bash /setup.sh
+      - bash /mlag-setup.sh leaf-1
       mgmt-ipv4: 172.20.20.23
 
     leaf-4:
@@ -78,9 +90,13 @@ topology:
       startup-config: configs/leaf-4/frr.conf
       daemons: [zebra, bgpd]
       binds:
-        - configs/leaf-4/setup.sh:/setup.sh
+      - configs/leaf-1/daemons:/etc/frr/daemons
+      - configs/leaf-1/frr.conf:/etc/frr/frr.conf
+      - configs/leaf-1/setup.sh:/setup.sh
+      - configs/mlag/mlag-setup.sh:/mlag-setup.sh
       exec:
-        - bash /setup.sh
+      - bash /setup.sh
+      - bash /mlag-setup.sh leaf-1
       mgmt-ipv4: 172.20.20.24
     
     srv-mh-01:

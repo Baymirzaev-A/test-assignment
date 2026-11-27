@@ -1,26 +1,7 @@
-#!/bin/sh
-#
-# Classic MLAG server-side interface setup.
-#
-# Usage:
-#   sh configs/mlag/mlag-setup.sh leaf-1
-#   sh configs/mlag/mlag-setup.sh leaf-2
-#   sh configs/mlag/mlag-setup.sh leaf-3
-#   sh configs/mlag/mlag-setup.sh leaf-4
-#
-# eth5 -> bond-mlag-a -> br-a (Tenant A)
-# eth6 -> bond-mlag-b -> br-b (Tenant B)
-#
-# eth4 / EVPN Multihoming bonds are NOT touched.
-
-set -eu
+#!/bin/bash
+set -euo pipefail
 
 LEAF="${1:-}"
-
-if [ "$(id -u)" -ne 0 ]; then
-    echo "ERROR: run as root"
-    exit 1
-fi
 
 case "$LEAF" in
     leaf-1|leaf-2)
@@ -35,122 +16,90 @@ case "$LEAF" in
         ;;
 esac
 
-BOND_A="bond-mlag-a"
-BOND_B="bond-mlag-b"
-
-BRIDGE_A="br-a"
-BRIDGE_B="br-b"
-
-PORT_A="eth5"
-PORT_B="eth6"
-
-MTU="9000"
+MTU=9000
 
 log() {
-    echo "[mlag-setup] $*"
+    echo "[MLAG] $*"
 }
 
-die() {
-    echo "[mlag-setup] ERROR: $*" >&2
-    exit 1
+require_iface() {
+    ip link show dev "$1" >/dev/null 2>&1 || {
+        echo "ERROR: interface $1 does not exist"
+        exit 1
+    }
 }
 
-link_exists() {
-    ip link show dev "$1" >/dev/null 2>&1
-}
-
-require_link() {
-    link_exists "$1" || die "Interface $1 does not exist"
-}
-
-set_bond_attribute() {
-    bond="$1"
-    attribute="$2"
-    value="$3"
-    path="/sys/class/net/$bond/bonding/$attribute"
-
-    [ -e "$path" ] || die \
-        "Required bonding attribute is unavailable: $path"
-
-    echo "$value" > "$path"
-}
-
-create_bond() {
-    bond="$1"
-    actor_key="$2"
-    port="$3"
-    bridge="$4"
+create_mlag_bond() {
+    local bond="$1"
+    local port="$2"
+    local bridge="$3"
+    local key="$4"
 
     log "Configuring $bond: $port -> $bridge"
 
-    require_link "$port"
-    require_link "$bridge"
+    require_iface "$port"
+    require_iface "$bridge"
 
-    # Remove the physical interface from its previous bridge.
+    # Remove the physical interface from its old bridge.
     ip link set dev "$port" down
     ip link set dev "$port" nomaster 2>/dev/null || true
 
     # Create the bond if it does not exist.
-    if ! link_exists "$bond"; then
-        ip link add name "$bond" type bond \
-            mode 802.3ad \
-            miimon 100 \
-            lacp_rate fast \
-            xmit_hash_policy layer2+3
+    if ! ip link show dev "$bond" >/dev/null 2>&1; then
+        ip link add name "$bond" type bond mode 802.3ad
     fi
 
-    # Configure the LACP identity before attaching the slave.
-    set_bond_attribute "$bond" mode 802.3ad
-    set_bond_attribute "$bond" miimon 100
-    set_bond_attribute "$bond" lacp_rate 1
-    set_bond_attribute "$bond" xmit_hash_policy layer2+3
-    set_bond_attribute "$bond" ad_actor_system "$ACTOR_SYSTEM"
-    set_bond_attribute "$bond" ad_actor_sys_prio 65535
-    set_bond_attribute "$bond" ad_user_port_key "$actor_key"
+    # Configure LACP.
+    ip link set dev "$bond" down
 
-    # Set MTU before attaching the physical interface.
-    ip link set dev "$port" mtu "$MTU"
+    ip link set dev "$bond" type bond \
+        mode 802.3ad \
+        miimon 100 \
+        lacp_rate fast \
+        xmit_hash_policy layer2+3 \
+        ad_actor_system "$ACTOR_SYSTEM"
+
     ip link set dev "$bond" mtu "$MTU"
 
-    # Attach physical port to bond.
+    # Attach physical server port to bond.
+    ip link set dev "$port" mtu "$MTU"
     ip link set dev "$port" master "$bond"
 
-    # Attach bond to the tenant bridge.
+    # Attach bond to existing tenant bridge.
+    ip link set dev "$bond" nomaster 2>/dev/null || true
     ip link set dev "$bond" master "$bridge"
 
-    # The server-facing bond is a tagged trunk:
-    # VLAN 10 and VLAN 20 are carried into the tenant bridge.
-    bridge vlan add dev "$bond" vid 10
-    bridge vlan add dev "$bond" vid 20
+    # Tagged server trunk: VLAN 10 and VLAN 20.
+    bridge vlan add dev "$bond" vid 10 2>/dev/null || true
+    bridge vlan add dev "$bond" vid 20 2>/dev/null || true
 
-    ip link set dev "$bond" up
     ip link set dev "$port" up
+    ip link set dev "$bond" up
 
-    log "$bond configured successfully"
+    log "$bond configured"
 }
 
-log "Starting MLAG interface setup on $LEAF"
-log "Shared LACP actor system: $ACTOR_SYSTEM"
+log "Starting MLAG server interface setup on $LEAF"
+log "Shared LACP System ID: $ACTOR_SYSTEM"
 
-require_link eth3
-require_link eth4
-require_link eth5
-require_link eth6
-require_link br-a
-require_link br-b
+require_iface eth3
+require_iface eth4
+require_iface eth5
+require_iface eth6
+require_iface br-a
+require_iface br-b
 
-# Pair-specific peer-link is eth3.
-# It is intentionally not configured by this script.
+# Tenant A:
+# srv-mlag-01 or srv-mlag-03
+create_mlag_bond bond-mlag-a eth5 br-a 101
 
-# Tenant A server-facing LAG.
-create_bond "$BOND_A" 101 "$PORT_A" "$BRIDGE_A"
+# Tenant B:
+# srv-mlag-02 or srv-mlag-04
+create_mlag_bond bond-mlag-b eth6 br-b 102
 
-# Tenant B server-facing LAG.
-create_bond "$BOND_B" 102 "$PORT_B" "$BRIDGE_B"
-
-log "Resulting interfaces:"
-ip -br link show "$BOND_A"
-ip -br link show "$BOND_B"
+log "MLAG bonds:"
+ip -d link show bond-mlag-a
+ip -d link show bond-mlag-b
 
 log "Bridge membership:"
 bridge link show
@@ -158,4 +107,4 @@ bridge link show
 log "VLAN membership:"
 bridge vlan show
 
-log "MLAG interface setup completed on $LEAF"
+log "MLAG server interfaces configured"
