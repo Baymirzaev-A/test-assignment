@@ -66,7 +66,7 @@ topology:
       - configs/mlag/mlag-setup.sh:/mlag-setup.sh
       exec:
       - bash /setup.sh
-      - bash /mlag-setup.sh leaf-1
+      - bash /mlag-setup.sh leaf-2
       mgmt-ipv4: 172.20.20.22
 
     leaf-3:
@@ -81,7 +81,7 @@ topology:
       - configs/mlag/mlag-setup.sh:/mlag-setup.sh
       exec:
       - bash /setup.sh
-      - bash /mlag-setup.sh leaf-1
+      - bash /mlag-setup.sh leaf-3
       mgmt-ipv4: 172.20.20.23
 
     leaf-4:
@@ -96,7 +96,7 @@ topology:
       - configs/mlag/mlag-setup.sh:/mlag-setup.sh
       exec:
       - bash /setup.sh
-      - bash /mlag-setup.sh leaf-1
+      - bash /mlag-setup.sh leaf-4
       mgmt-ipv4: 172.20.20.24
     
     srv-mh-01:
