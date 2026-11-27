@@ -68,9 +68,20 @@ def set_bond_state(interface, enabled):
     run(["ip", "link", "set", "dev", interface, state], check=False)
 
 
+def write_sysfs(path, value):
+    """Write a sysfs attribute without O_TRUNC."""
+    fd = os.open(path, os.O_WRONLY)
+    try:
+        data = str(value).encode("ascii")
+        written = os.write(fd, data)
+        if written != len(data):
+            raise OSError(f"Short write to {path}: {written}/{len(data)}")
+    finally:
+        os.close(fd)
+
+
 def set_lacp_identity(interface, system_mac, system_priority, user_key):
     base = f"/sys/class/net/{interface}/bonding"
-
     attributes = {
         "mode": "4",
         "ad_actor_system": system_mac,
@@ -83,10 +94,12 @@ def set_lacp_identity(interface, system_mac, system_priority, user_key):
 
     for name, value in attributes.items():
         path = os.path.join(base, name)
+
         if not os.path.exists(path):
             raise RuntimeError(f"Missing bonding attribute: {path}")
-        with open(path, "w", encoding="ascii") as f:
-            f.write(value)
+
+        write_sysfs(path, value)
+        LOG.info("%s: %s=%s", interface, name, value)
 
 
 def send_packet(sock, peer_ip, port, payload):
