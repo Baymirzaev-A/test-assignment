@@ -28,7 +28,7 @@ docker exec -it clab-dc-fabric-spine-1 vtysh -c "show ip route bgp"
 ```bash
 docker exec -it clab-dc-fabric-leaf-1 ping -I 10.0.1.1 -c 4 10.0.1.2
 ```
-Если не указать source, то пинг пойдет с ip 192.168.1.1 или 192.168.2.1, а так как мы не анонсируем стыковочные сети в bgp, ответ от 10.0.1.2 не придет.
+Если не указать source, то пинг пойдет с ip 192.168.1.1 или 192.168.2.1, а так как мы не анонсируем p2p сети в bgp, ответ от 10.0.1.2 не придет.
 ```bash
 docker exec -it clab-dc-fabric-leaf-1 vtysh -c "show ip route 10.0.0.100/32"
 ```
@@ -70,7 +70,7 @@ vtysh -c "show evpn es"
 vtysh -c "show evpn es-evi"
 ```
 
-Проверка LACP на Leaf 
+**Проверка LACP на Leaf** 
 
 
 ```bash
@@ -114,6 +114,58 @@ for i in 1 2 3 4; do
   docker exec clab-dc-fabric-leaf-$i bridge vlan show
 done
 ```
+
+Надо проверить как отработал python скрипт.
+
+```bash
+for i in 1 2 3 4; do   
+echo "========== LEAF-$i ==========";   
+docker exec clab-dc-fabric-leaf-$i sh -c     'pgrep -af mlagd; 
+echo "--- LOG ---"; cat /var/log/mlagd.log'; 
+done
+```
+Тут нас интересует строка *State=ACTIVE peer_alive=True peer_link_up=True forwarding=True*
+НО обязательно будут и строки hertbeat failed из-за кривой и неполной реализации.
+
+### Тест на отключение линка одного сервера
+```bash
+docker exec clab-dc-fabric-srv-mlag-01 ip link set eth1 down
+
+docker exec clab-dc-fabric-srv-mlag-01 cat /proc/net/bonding/bond0
+```
+
+после этого смотрим, что один интерфейс лежит, LACP aggregator работает (было два порта, стало 1, MII статаус как был up, так и остался)
+
+Теперь тестим отключение пир-линка:
+```bash
+ docker exec clab-dc-fabric-leaf-1 ip link set eth3 down
+```
+
+```bash
+docker exec clab-dc-fabric-leaf-1 \
+  sh -c 'tail -n 40 /var/log/mlagd.log'
+```
+И видим 
+*State=PRIMARY_DEGRADED peer_alive=True peer_link_up=False forwarding=True*
+
+То есть остался ACTOR
+```bash
+for i in 1 2; do
+  echo "===== LEAF-$i ====="
+  for b in bond-mlag-a bond-mlag-b; do
+    echo "--- $b ---"
+    docker exec clab-dc-fabric-leaf-$i ip -br link show dev "$b"
+  done
+done
+```
+И видим что на LEAF 1 бонд в UP, а в leaf 2 - down.
+Можем включить
+```bash
+ docker exec clab-dc-fabric-leaf-1 ip link set eth3 up
+```
+
+
+
 
 ## Остановка и удаление лабы.
 

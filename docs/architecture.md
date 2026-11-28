@@ -132,6 +132,8 @@ Router-ID Leaf в `10.0.1.0/24`.
 
 Port key 101 (bond-mlag-a на eth5) и 102 (bond-mlag-b порт 6)
 
+### НО реализация полноценного MLAG не готова, обоснование в файле architecture.md
+
 **Соответствие серверов вланам**
 | Сервер | Tenant | VLAN | Bridge на Leaf | VLAN-интерфейс сервера |
 |---|---|---:|---|---|
@@ -139,6 +141,8 @@ Port key 101 (bond-mlag-a на eth5) и 102 (bond-mlag-b порт 6)
 | srv-mlag-02 | B | 20 | br-b | bond0.20 |
 | srv-mlag-03 | A | 10 | br-a | bond0.10 |
 | srv-mlag-04 | B | 20 | br-b | bond0.20 |
+
+
 
 
 | Элемент | tenant-a | tenant-a | 
