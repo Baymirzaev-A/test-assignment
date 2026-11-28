@@ -62,6 +62,24 @@ create_mlag_bond() {
 
     ip link set dev "$bond" mtu "$MTU"
 
+    # Set LACP user port key before attaching the physical slave.
+    local key_path="/sys/class/net/$bond/bonding/ad_user_port_key"
+
+    if [[ ! -e "$key_path" ]]; then
+        echo "ERROR: missing $key_path" >&2
+        exit 1
+    fi
+
+    printf '%s' "$key" > "$key_path"
+
+    actual_key=$(cat "$key_path")
+    if [[ "$actual_key" != "$key" ]]; then
+        echo "ERROR: $bond expected key $key, got $actual_key" >&2
+        exit 1
+    fi
+
+    log "$bond LACP user port key=$actual_key"
+
     # Set user port key before attaching the physical port.
     [[ -e "$key_path" ]] || {
         echo "ERROR: missing sysfs attribute: $key_path" >&2

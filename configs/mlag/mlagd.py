@@ -85,9 +85,6 @@ def set_lacp_identity(interface, system_mac, system_priority, user_key):
     attributes = {
         "ad_actor_system": system_mac,
         "ad_actor_sys_prio": str(system_priority),
-        "lacp_rate": "1",
-        "xmit_hash_policy": "layer2+3",
-        "miimon": "100",
     }
 
     for name, value in attributes.items():
@@ -96,8 +93,14 @@ def set_lacp_identity(interface, system_mac, system_priority, user_key):
         if not os.path.exists(path):
             raise RuntimeError(f"Missing bonding attribute: {path}")
 
-        write_sysfs(path, value)
-        LOG.info("%s: %s=%s", interface, name, value)
+        fd = os.open(path, os.O_WRONLY)
+        try:
+            data = value.encode("ascii")
+            written = os.write(fd, data)
+            if written != len(data):
+                raise RuntimeError(f"Short write to {path}")
+        finally:
+            os.close(fd)
 
 
 def send_packet(sock, peer_ip, port, payload):
@@ -129,7 +132,6 @@ def main():
             bond["name"],
             bond["actor_system"],
             bond.get("actor_priority", 65535),
-            bond["actor_key"],
         )
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
