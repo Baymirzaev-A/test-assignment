@@ -1,3 +1,5 @@
+set -euo pipefall
+
 1 address "$RMAC" addrgenmode none
 ip link set br-a.4091 master tenant-a
 ip link set br-a.4091 up
@@ -14,7 +16,7 @@ ip link set br-b.4092 up
 
 create_anycast_gateway() {
     local name="$1"
-    local parent="$2"s
+    local parent="$2"
     local vrf="$3"
     local mac="$4"
     local address="$5"

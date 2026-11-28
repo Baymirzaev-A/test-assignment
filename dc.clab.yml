@@ -109,7 +109,7 @@ topology:
       exec:
         - bash /setup.sh
         - bash /mlag-setup.sh leaf-4
-        - bash /vrf-setup.sh leaf 4 10.10.10.4 02:ff:00:00:00:04
+        - bash /vrf-setup.sh leaf-4 10.10.10.4 02:ff:00:00:00:04
         - sh -c 'command -v python3 >/dev/null || exit 1; nohup python3 /usr/local/sbin/mlagd.py /etc/mlag/mlag.json </dev/null >/var/log/mlagd.log 2>&1 &'
       mgmt-ipv4: 172.20.20.24
     
