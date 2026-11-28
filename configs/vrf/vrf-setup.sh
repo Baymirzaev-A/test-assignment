@@ -156,6 +156,7 @@ vtysh \
     -c "redistribute connected" \
     -c "exit-address-family" \
     -c "address-family l2vpn evpn" \
+    -c "rd ${VTEP_IP}:5001 \
     -c "route-target import 64999:5001" \
     -c "route-target export 64999:5001" \
     -c "advertise ipv4 unicast" \
@@ -166,6 +167,7 @@ vtysh \
     -c "redistribute connected" \
     -c "exit-address-family" \
     -c "address-family l2vpn evpn" \
+    -c "rd ${VTEP_IP}:5002 \
     -c "route-target import 64999:5002" \
     -c "route-target export 64999:5002" \
     -c "advertise ipv4 unicast" \
