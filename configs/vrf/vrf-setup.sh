@@ -8,7 +8,7 @@ RMAC="${3:?RMAC is required}"
 GW_MAC_A="aa:bb:00:00:00:01"
 GW_MAC_B="aa:bb:00:00:00:02"
 
-1 address "$RMAC" addrgenmode none
+ip link set br-a.4091 address "$RMAC" addrgenmode none
 ip link set br-a.4091 master tenant-a
 ip link set br-a.4091 up
 
