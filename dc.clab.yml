@@ -13,8 +13,10 @@ topology:
       daemons: [zebra, bgpd]
       binds:
         - configs/gateway/setup.sh:/setup.sh
+        - configs/vrf/vrf-setup.sh:/vrf-setup.sh
       exec:
         - bash /setup.sh
+        - bash /vrf-setup.sh gateway 10.10.10.100 02:ff:00:00:00:64
       mgmt-ipv4: 172.20.20.100
 
     spine-1:
@@ -49,9 +51,11 @@ topology:
         - configs/mlag/mlag-setup.sh:/mlag-setup.sh
         - configs/mlag/mlagd.py:/usr/local/sbin/mlagd.py
         - configs/mlag/leaf-1.json:/etc/mlag/mlag.json
+        - configs/vrf/vrf-setup.sh:/vrf-setup.sh
       exec:
         - bash /setup.sh
         - bash /mlag-setup.sh leaf-1
+        - bash /vrf-setup.sh leaf-1 10.10.10.1 02:ff:00:00:00:01
         - sh -c 'command -v python3 >/dev/null || exit 1; nohup python3 /usr/local/sbin/mlagd.py /etc/mlag/mlag.json </dev/null >/var/log/mlagd.log 2>&1 &'
       mgmt-ipv4: 172.20.20.21
 
@@ -65,9 +69,11 @@ topology:
         - configs/mlag/mlag-setup.sh:/mlag-setup.sh
         - configs/mlag/mlagd.py:/usr/local/sbin/mlagd.py
         - configs/mlag/leaf-2.json:/etc/mlag/mlag.json
+        - configs/vrf/vrf-setup.sh:/vrf-setup.sh
       exec:
         - bash /setup.sh
         - bash /mlag-setup.sh leaf-2
+        - bash /vrf-setup.sh leaf-2 10.10.10.2 02:ff:00:00:00:02
         - sh -c 'command -v python3 >/dev/null || exit 1; nohup python3 /usr/local/sbin/mlagd.py /etc/mlag/mlag.json </dev/null >/var/log/mlagd.log 2>&1 &'
       mgmt-ipv4: 172.20.20.22
 
@@ -81,9 +87,11 @@ topology:
         - configs/mlag/mlag-setup.sh:/mlag-setup.sh
         - configs/mlag/mlagd.py:/usr/local/sbin/mlagd.py
         - configs/mlag/leaf-3.json:/etc/mlag/mlag.json
+        - configs/vrf/vrf-setup.sh:/vrf-setup.sh
       exec:
         - bash /setup.sh
         - bash /mlag-setup.sh leaf-3
+        - bash /vrf-setup.sh leaf-3 10.10.10.3 02:ff:00:00:00:03
         - sh -c 'command -v python3 >/dev/null || exit 1; nohup python3 /usr/local/sbin/mlagd.py /etc/mlag/mlag.json </dev/null >/var/log/mlagd.log 2>&1 &'
       mgmt-ipv4: 172.20.20.23
 
@@ -97,9 +105,11 @@ topology:
         - configs/mlag/mlag-setup.sh:/mlag-setup.sh
         - configs/mlag/mlagd.py:/usr/local/sbin/mlagd.py
         - configs/mlag/leaf-4.json:/etc/mlag/mlag.json
+        - configs/vrf/vrf-setup.sh:/vrf-setup.sh
       exec:
         - bash /setup.sh
         - bash /mlag-setup.sh leaf-4
+        - bash /vrf-setup.sh leaf 4 10.10.10.4 02:ff:00:00:00:04
         - sh -c 'command -v python3 >/dev/null || exit 1; nohup python3 /usr/local/sbin/mlagd.py /etc/mlag/mlag.json </dev/null >/var/log/mlagd.log 2>&1 &'
       mgmt-ipv4: 172.20.20.24
     
