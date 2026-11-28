@@ -1,4 +1,4 @@
-set -euo pipefall
+set -euo pipefail
 
 1 address "$RMAC" addrgenmode none
 ip link set br-a.4091 master tenant-a
