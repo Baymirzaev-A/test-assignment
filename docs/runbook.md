@@ -164,11 +164,40 @@ done
  docker exec clab-dc-fabric-leaf-1 ip link set eth3 up
 ```
 
+## Тестируем VRF и L3VNI
 
+```bash
+ for node in leaf-1 leaf-2 leaf-3 leaf-4 gateway; do
+    echo "========== $node =========="
+    docker exec clab-dc-fabric-$node \
+        vtysh -c "show vrf vni"
+done
+```
+Тут видим создались ли VRF:
+tenant-a - 5001 - vx-a - br-a.4091 - установился ли RMAC
 
+Создались ли vrf таблицы 5001 и 5002
+```bash
+docker exec clab-dc-fabric-leaf-1 ip -d link show type vrf
+```
+
+Смотрим все интерфейсы
+```bash
+docker exec clab-dc-fabric-leaf-1 ip -br link
+```
+
+И сетки у каждого tenant 
+```bash
+ docker exec clab-dc-fabric-leaf-1 \
+    vtysh -c "show ip route vrf tenant-a"
+```
+```bash
+ docker exec clab-dc-fabric-leaf-1 \
+    vtysh -c "show ip route vrf tenant-b"
+```
 
 ## Остановка и удаление лабы.
 
 ```bash
-sudo containerlab destroy -t topology/dc-mini.clab.yml --cleanup
+sudo containerlab destroy -t topology/dc.clab.yml --cleanup
 ```
