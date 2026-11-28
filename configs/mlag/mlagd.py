@@ -80,7 +80,7 @@ def write_sysfs(path, value):
         os.close(fd)
 
 
-def set_lacp_identity(interface, system_mac, system_priority, user_key):
+def set_lacp_identity(interface, system_mac, system_priority):
     base = f"/sys/class/net/{interface}/bonding"
     attributes = {
         "ad_actor_system": system_mac,
