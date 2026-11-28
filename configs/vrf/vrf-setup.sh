@@ -154,9 +154,7 @@ vtysh \
     -c "router bgp 64999 vrf tenant-a" \
     -c "address-family ipv4 unicast" \
     -c "redistribute connected" \
-
-
--c "exit-address-family" \
+    -c "exit-address-family" \
     -c "address-family l2vpn evpn" \
     -c "route-target import 64999:5001" \
     -c "route-target export 64999:5001" \
