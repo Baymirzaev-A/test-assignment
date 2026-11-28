@@ -105,9 +105,18 @@ def set_lacp_identity(interface, system_mac, system_priority):
 
 def send_packet(sock, peer_ip, port, payload):
     try:
-        sock.sendto(json.dumps(payload).encode(), (peer_ip, port))
+        sock.sendto(
+            json.dumps(payload).encode("utf-8"),
+            (peer_ip, port),
+        )
     except OSError as exc:
-        LOG.warning("Heartbeat send failed: %s", exc)
+        LOG.warning(
+            "Heartbeat send failed: local=%s peer=%s:%s error=%s",
+            sock.getsockname()[0],
+            peer_ip,
+            port,
+            exc,
+        )
 
 
 def main():
@@ -137,7 +146,7 @@ def main():
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind((local_ip, port))
-    sock.settimeout(0.2)
+    sock.setblocking(False)
 
     peer_last_seen = 0.0
     last_log_state = None
@@ -151,17 +160,40 @@ def main():
         now = time.monotonic()
         peer_link_up = link_is_up(peer_link)
 
-        # Receive heartbeat from the configured peer only.
-        try:
-            data, address = sock.recvfrom(4096)
-            if address[0] == peer_ip:
-                message = json.loads(data.decode())
-                if message.get("domain") == cfg["domain"]:
-                    peer_last_seen = time.monotonic()
-        except socket.timeout:
-            pass
-        except (ValueError, OSError) as exc:
-            LOG.warning("Heartbeat receive error: %s", exc)
+        # Drain all queued heartbeat packets.
+        while True:
+            try:
+                data, address = sock.recvfrom(4096)
+            except BlockingIOError:
+                break
+            except OSError as exc:
+                LOG.warning("Heartbeat receive error: %s", exc)
+                break
+
+            if address[0] != peer_ip:
+                continue
+
+            try:
+                message = json.loads(data.decode("utf-8"))
+            except (ValueError, UnicodeDecodeError):
+                LOG.warning("Invalid heartbeat packet from %s", address[0])
+                continue
+
+            if message.get("domain") != cfg["domain"]:
+                continue
+
+            if message.get("node") != cfg["peer_node"]:
+                continue
+
+            # Reject stale packets.
+            packet_time = message.get("time")
+            if not isinstance(packet_time, (int, float)):
+                continue
+
+            if abs(time.time() - packet_time) > timeout:
+                continue
+
+            peer_last_seen = time.monotonic()
 
         peer_alive = (time.monotonic() - peer_last_seen) < timeout
 
